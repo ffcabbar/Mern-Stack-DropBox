@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import LayoutPage from "./Layout/LayoutPage";
 import UserContext from "./context/UserContext";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 import Axios from "axios";
 import "./App.css";
 
@@ -44,11 +46,10 @@ function App() {
     <>
       <BrowserRouter>
         <UserContext.Provider value={{ userData, setUserData }}>
-          <LayoutPage />
           <Switch>
-            <Route exact path="/" />
-            <Route path="/login" />
-            <Route path="/register" />
+            <Route exact path="/" component={LayoutPage} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
           </Switch>
         </UserContext.Provider>
       </BrowserRouter>

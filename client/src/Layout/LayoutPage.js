@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Layout, Menu, Breadcrumb } from "antd";
+import { useHistory } from "react-router-dom";
 import {
   UserOutlined,
   PieChartOutlined,
@@ -9,6 +10,7 @@ import {
 import "../App.css";
 
 function LayoutPage() {
+  const history = useHistory();
   const { Header, Content, Sider } = Layout;
   const { SubMenu } = Menu;
 
@@ -28,6 +30,18 @@ function LayoutPage() {
   const showOption2 = () => {
     console.log("tıkladıı");
     setShow("option2");
+  };
+
+  const goLogin = () => {
+    history.push("/login");
+  };
+
+  const goRegiser = () => {
+    history.push("/register");
+  };
+
+  const goHome = () => {
+    history.push("/");
   };
 
   let content = null;
@@ -56,12 +70,18 @@ function LayoutPage() {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["3"]}
           style={{ float: "right" }}
         >
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
+          <Menu.Item key="1" onClick={goLogin}>
+            Login
+          </Menu.Item>
+          <Menu.Item key="2" onClick={goRegiser}>
+            Register
+          </Menu.Item>
+          <Menu.Item key="3" onClick={goHome}>
+            Home
+          </Menu.Item>
         </Menu>
       </Header>
       <Layout style={{ minHeight: "100vh" }}>
