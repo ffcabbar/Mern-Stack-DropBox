@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
+import UploadVideo from "../components/UploadVideo/UploadVideo";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { useHistory } from "react-router-dom";
 import {
@@ -44,13 +45,11 @@ function LayoutPage() {
   };
 
   const showOption = () => {
-    console.log("tıkladıı");
     setShow("option");
   };
 
-  const showOption2 = () => {
-    console.log("tıkladıı");
-    setShow("option2");
+  const uploadVideo = () => {
+    setShow("uploadvideo");
   };
 
   let content = null;
@@ -59,8 +58,8 @@ function LayoutPage() {
       content = <h3>OPTION</h3>;
       break;
 
-    case "option2":
-      content = <h3>OPTION2</h3>;
+    case "uploadvideo":
+      content = <UploadVideo />;
       break;
 
     default:
@@ -95,8 +94,8 @@ function LayoutPage() {
             <Menu.Item key="1" onClick={showOption} icon={<PieChartOutlined />}>
               Option 1
             </Menu.Item>
-            <Menu.Item key="2" onClick={showOption2} icon={<DesktopOutlined />}>
-              Option 2
+            <Menu.Item key="2" onClick={uploadVideo} icon={<DesktopOutlined />}>
+              Upload Video
             </Menu.Item>
             <SubMenu key="sub1" icon={<UserOutlined />} title="User">
               <Menu.Item key="3">Tom</Menu.Item>
