@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import UserContext from "../context/UserContext";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { useHistory } from "react-router-dom";
 import {
@@ -16,6 +17,26 @@ function LayoutPage() {
 
   const [collapsed, setCollapsed] = useState(false);
   const [show, setShow] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const { userData, setUserData } = useContext(UserContext);
+  const logoutUser = () => {
+    setUserData({
+      token: undefined,
+      user: undefined,
+    });
+
+    localStorage.setItem("auth-token", "");
+    setIsLoggedIn(false);
+  };
+
+  useEffect(() => {
+    let res = localStorage.getItem("auth-token");
+    if (!res) {
+      history.push("/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
 
   const onCollapse = () => {
     console.log(collapsed);
@@ -32,20 +53,7 @@ function LayoutPage() {
     setShow("option2");
   };
 
-  const goLogin = () => {
-    history.push("/login");
-  };
-
-  const goRegiser = () => {
-    history.push("/register");
-  };
-
-  const goHome = () => {
-    history.push("/");
-  };
-
   let content = null;
-
   switch (show) {
     case "option":
       content = <h3>OPTION</h3>;
@@ -73,15 +81,11 @@ function LayoutPage() {
           defaultSelectedKeys={["3"]}
           style={{ float: "right" }}
         >
-          <Menu.Item key="1" onClick={goLogin}>
-            Login
-          </Menu.Item>
-          <Menu.Item key="2" onClick={goRegiser}>
-            Register
-          </Menu.Item>
-          <Menu.Item key="3" onClick={goHome}>
-            Home
-          </Menu.Item>
+          {userData.user ? (
+            <Menu.Item key="1" onClick={logoutUser}>
+              Logout
+            </Menu.Item>
+          ) : null}
         </Menu>
       </Header>
       <Layout style={{ minHeight: "100vh" }}>

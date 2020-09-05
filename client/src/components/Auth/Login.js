@@ -1,19 +1,96 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import UserContext from "../../context/UserContext";
 import { Row, Col, Layout, Form, Input, Button } from "antd";
 import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Axios from "axios";
 
 const Login = () => {
   const history = useHistory();
+
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const { setUserData } = useContext(UserContext);
+
+  const submit = async (e) => {
+    try {
+      const loginUser = { email, password };
+
+      const loginRes = await Axios.post(
+        "http://localhost:5000/users/login",
+        loginUser
+      );
+
+      if (loginRes.status === 200) {
+        setAlertOpen(true);
+        notify();
+      }
+
+      setUserData({
+        token: loginRes.data.token,
+        user: loginRes.data.user,
+      });
+
+      localStorage.setItem("auth-token", loginRes.data.token);
+      setTimeout(() => {
+        history.push("/");
+      }, 4000);
+    } catch (error) {
+      setAlertOpen(true);
+      notify2();
+    }
+  };
+
+  const notify = () =>
+    toast.success("👌 Login işlemi başarılı. Yönlendiriliyorsunuz...", {
+      position: "top-right",
+      autoClose: 3500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const notify2 = () =>
+    toast.error(
+      "🤨 Login işlemi başarısız!. Lütfen bilgililerinizi kontrol ediniz...",
+      {
+        position: "top-right",
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
 
   const goRegister = () => {
     history.push("/register");
   };
   return (
     <>
+      {alertOpen && (
+        <ToastContainer
+          position="top-right"
+          autoClose={3500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      )}
       <Layout style={{ height: "935px" }}>
         <Row style={{ marginTop: "150px", marginBottom: "150px" }}>
           <Col span={8} offset={4}>
-            <Form style={{ margin: "120px" }}>
+            <Form style={{ margin: "120px" }} onFinish={submit}>
               <Form.Item
                 name="email"
                 rules={[
@@ -21,7 +98,12 @@ const Login = () => {
                 ]}
                 style={{ marginTop: "200px" }}
               >
-                <Input type="email" size="large" placeholder="Email" />
+                <Input
+                  type="email"
+                  size="large"
+                  placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -29,7 +111,11 @@ const Login = () => {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password size="large" placeholder="Password" />
+                <Input.Password
+                  size="large"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit" block>
@@ -59,7 +145,7 @@ const Login = () => {
                 <span role="img" aria-label="kalp">
                   💗
                 </span>{" "}
-                by Furkan in 2020.
+                by Furkan in {new Date().getFullYear()}.
               </a>{" "}
             </Form>
           </Col>

@@ -1,26 +1,96 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Layout, Form, Input, Button } from "antd";
 import { useHistory } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Axios from "axios";
 
 const Register = () => {
   const history = useHistory();
 
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [passwordCheck, setPasswordCheck] = useState();
+  const [displayName, setDisplayName] = useState();
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const submit = async (e) => {
+    try {
+      const newUser = { email, password, passwordCheck, displayName };
+      await Axios.post("http://localhost:5000/users/register", newUser);
+
+      setAlertOpen(true);
+      notify();
+
+      setTimeout(() => {
+        history.push("/login");
+      }, 4000);
+    } catch (error) {
+      setAlertOpen(true);
+      notify2();
+    }
+  };
+
   const goLogin = () => {
     history.push("/login");
   };
+
+  const notify = () =>
+    toast.success("👌 Register işlemi başarılı. Yönlendiriliyorsunuz...", {
+      position: "top-right",
+      autoClose: 3500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const notify2 = () =>
+    toast.error(
+      "🤨 Register işlemi başarısız!. Lütfen bilgililerinizi kontrol ediniz...",
+      {
+        position: "top-right",
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
+    );
+
   return (
     <>
+      {alertOpen && (
+        <ToastContainer
+          position="top-right"
+          autoClose={3500}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      )}
+
       <Layout style={{ height: "935px" }}>
         <Row style={{ marginTop: "150px", marginBottom: "150px" }}>
           <Col span={8} offset={4}>
-            <Form style={{ margin: "120px" }}>
+            <Form style={{ margin: "120px" }} onFinish={submit}>
               <Form.Item
                 name="username"
                 rules={[
                   { required: true, message: "Please input your username!" },
                 ]}
               >
-                <Input size="large" placeholder="Username" />
+                <Input
+                  size="large"
+                  placeholder="Username"
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="email"
@@ -28,7 +98,12 @@ const Register = () => {
                   { required: true, message: "Please input your email!" },
                 ]}
               >
-                <Input type="email" size="large" placeholder="Email" />
+                <Input
+                  type="email"
+                  size="large"
+                  placeholder="Email"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="password"
@@ -36,15 +111,26 @@ const Register = () => {
                   { required: true, message: "Please input your password!" },
                 ]}
               >
-                <Input.Password size="large" placeholder="Password" />
+                <Input.Password
+                  size="large"
+                  placeholder="Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 name="RePassword"
                 rules={[
-                  { required: true, message: "Please input your Re-Password!" },
+                  {
+                    required: true,
+                    message: "Please input your Re-Password!",
+                  },
                 ]}
               >
-                <Input.Password size="large" placeholder="Re-Password" />
+                <Input.Password
+                  size="large"
+                  placeholder="Re-Password"
+                  onChange={(e) => setPasswordCheck(e.target.value)}
+                />
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit" block>
@@ -53,7 +139,11 @@ const Register = () => {
               </Form.Item>
               <span
                 onClick={goLogin}
-                style={{ float: "right", color: "#1890ff", cursor: "pointer" }}
+                style={{
+                  float: "right",
+                  color: "#1890ff",
+                  cursor: "pointer",
+                }}
               >
                 Already have an account? Login
               </span>
@@ -73,10 +163,11 @@ const Register = () => {
                 <span role="img" aria-label="kalp">
                   💗
                 </span>{" "}
-                by Furkan in 2020.
+                by Furkan in {new Date().getFullYear()}.
               </a>{" "}
             </Form>
           </Col>
+
           <Col span={8} push={1}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
