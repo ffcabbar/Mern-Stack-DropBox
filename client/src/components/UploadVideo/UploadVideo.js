@@ -45,6 +45,11 @@ const UploadVideo = () => {
       data.append("file", selectedVideos[i]);
     }
     Axios.post("http://localhost:5000/api/uploadVideo", data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer'
+      }
+    },{
       onUploadProgress: (ProgressEvent) => {
         setLoaded((ProgressEvent.loaded / ProgressEvent.total) * 100);
       },

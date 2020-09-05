@@ -2,6 +2,8 @@ const router = require("express").Router();
 const multer = require("multer");
 const Upload = require("../models/videoDetails");
 
+const thumbnailGenerator = require("../helpers/videoThumbnail");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "media/uploads/");
@@ -19,17 +21,15 @@ const upload = multer({
 });
 
 router.post("/uploadVideo", upload.single("file"), (req, res, next) => {
-  console.log(req.file);
+  thumbnailGenerator.generateThumbnail(
+    // /api/videos is made publically available in App.js
+    "http://localhost:5000/api/videos/" + req.file.filename.replace(/ /g, "_"),
+    req.file.filename.replace(/ /g, "_")
+  );
+
   res.status(200).json({
     message: "Upload Successful",
   });
-  const newItem = new Upload({
-    file_name: req.file.originalname,
-    file_path: req.file.path,
-    file_destination: req.file.destination,
-  });
-  const savedItem = newItem.save();
-  res.json(savedItem);
 });
 
 module.exports = router;
