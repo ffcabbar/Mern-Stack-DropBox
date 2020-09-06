@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import videojs from 'video.js';
 import './videojs.css';
+import { Row } from 'antd';
 
 
 class VideoPlayer extends React.Component {
@@ -52,15 +53,15 @@ class VideoPlayer extends React.Component {
 
   render() {
     return (
-        <div className="row" style={{ width: "100vw" }}>
-          <div className="col-xs-12 col-sm-12 col-md-10 col-lg-8 mx-auto mt-5">
+        <Row style={{ width: "100vw" }}>
+          <div style={{marginLeft: "330px", marginTop: "100px"}}>
             {this.state.loaded ? (
               <div data-vjs-player>
                 <video ref={node => this.videoNode = node} className="video-js vjs-big-play-centered" />
               </div>
             ) : ' Loading ... '}
           </div>
-        </div>
+        </Row>
     );
   }
 }
