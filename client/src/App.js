@@ -6,6 +6,7 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Axios from "axios";
 import "./App.css";
+import VideoPlayer from "./components/VideoPlayer/VideoPlayer";
 
 function App() {
   const [userData, setUserData] = useState({
@@ -48,6 +49,7 @@ function App() {
         <UserContext.Provider value={{ userData, setUserData }}>
           <Switch>
             <Route exact path="/" component={LayoutPage} />
+            <Route exact path="/video/:videoTitle" component={VideoPlayer} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>

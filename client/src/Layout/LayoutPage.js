@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
 import UploadVideo from "../components/UploadVideo/UploadVideo";
+import Dashboard from "../components/Dashboard/Dashboard";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { useHistory } from "react-router-dom";
 import {
@@ -44,8 +45,8 @@ function LayoutPage() {
     setCollapsed((prev) => !prev);
   };
 
-  const showOption = () => {
-    setShow("option");
+  const showDashboard = () => {
+    setShow("dashboard");
   };
 
   const uploadVideo = () => {
@@ -54,8 +55,8 @@ function LayoutPage() {
 
   let content = null;
   switch (show) {
-    case "option":
-      content = <h3>OPTION</h3>;
+    case "dashboard":
+      content = <Dashboard />;
       break;
 
     case "uploadvideo":
@@ -63,12 +64,7 @@ function LayoutPage() {
       break;
 
     default:
-      content = (
-        <h3>
-          Please query the employee you want to see by typing perNo and tcNo
-          from the menu on the left...
-        </h3>
-      );
+      content = <Dashboard />;
   }
 
   return (
@@ -91,8 +87,12 @@ function LayoutPage() {
         <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-            <Menu.Item key="1" onClick={showOption} icon={<PieChartOutlined />}>
-              Option 1
+            <Menu.Item
+              key="1"
+              onClick={showDashboard}
+              icon={<PieChartOutlined />}
+            >
+              Dashboard
             </Menu.Item>
             <Menu.Item key="2" onClick={uploadVideo} icon={<DesktopOutlined />}>
               Upload Video
