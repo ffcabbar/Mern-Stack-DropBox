@@ -8,6 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// SEND MAIL
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`The server has started on port: ${PORT}`));
@@ -32,4 +34,5 @@ mongoose.connect(
 app.use("/users", require("./routes/userRouter"));
 app.use("/api", require("./routes/uploadVideoRouter"));
 app.use("/api", require("./routes/videoListRouter"));
+app.use("/api", require("./routes/sendMailRouter"));
 app.use("/api/videos", express.static("media/uploads"));

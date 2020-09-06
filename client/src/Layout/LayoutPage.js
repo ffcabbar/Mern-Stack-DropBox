@@ -2,15 +2,17 @@ import React, { useState, useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
 import UploadVideo from "../components/UploadVideo/UploadVideo";
 import Dashboard from "../components/Dashboard/Dashboard";
+import SendMail from "../components/Mail/SendMail";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { useHistory } from "react-router-dom";
 import {
-  UserOutlined,
+  MailOutlined,
   PieChartOutlined,
   DesktopOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 import "../App.css";
+
 
 function LayoutPage() {
   const history = useHistory();
@@ -53,6 +55,10 @@ function LayoutPage() {
     setShow("uploadvideo");
   };
 
+  const showMail = () => {
+    setShow("mail");
+  };
+
   let content = null;
   switch (show) {
     case "dashboard":
@@ -61,6 +67,10 @@ function LayoutPage() {
 
     case "uploadvideo":
       content = <UploadVideo />;
+      break;
+
+    case "mail":
+      content = <SendMail />;
       break;
 
     default:
@@ -97,11 +107,11 @@ function LayoutPage() {
             <Menu.Item key="2" onClick={uploadVideo} icon={<DesktopOutlined />}>
               Upload Video
             </Menu.Item>
-            <SubMenu key="sub1" icon={<UserOutlined />} title="User">
-              <Menu.Item key="3">Tom</Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
-            </SubMenu>
+
+            <Menu.Item key="3" onClick={showMail} icon={<MailOutlined />}>
+              Mail
+            </Menu.Item>
+
             <SubMenu key="sub2" icon={<TeamOutlined />} title="Team">
               <Menu.Item key="6">Team 1</Menu.Item>
               <Menu.Item key="8">Team 2</Menu.Item>
