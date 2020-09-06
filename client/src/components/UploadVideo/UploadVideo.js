@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Progress } from "antd";
+import { Progress, Divider, Button } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "axios";
+import "./UploadVideo.css";
 
 const UploadVideo = () => {
   const [selectedVideos, setSelectedVideos] = useState(null);
@@ -35,27 +36,34 @@ const UploadVideo = () => {
     const files = event.target.files;
     if (maxSelectFile(event)) {
       setSelectedVideos(files);
-      setLoaded(0);
+      setLoaded(50);
     }
   };
 
   const fileUploadHandler = (event) => {
+    event.preventDefault();
     const data = new FormData();
     for (let i = 0; i < selectedVideos.length; i++) {
       data.append("file", selectedVideos[i]);
     }
-    Axios.post("http://localhost:5000/api/uploadVideo", data, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer'
-      }
-    },{
-      onUploadProgress: (ProgressEvent) => {
-        setLoaded((ProgressEvent.loaded / ProgressEvent.total) * 100);
+    Axios.post(
+      "http://localhost:5000/api/uploadVideo",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer",
+        },
       },
-    })
+      {
+        onUploadProgress: (ProgressEvent) => {
+          setLoaded((ProgressEvent.loaded / ProgressEvent.total) * 100);
+        },
+      }
+    )
       .then((res) => {
         toast.success("Upload Successful");
+        setLoaded(100);
       })
       .catch((err) => {
         toast.error(`Upload Fail with status: ${err.statusText}`);
@@ -63,12 +71,13 @@ const UploadVideo = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <>
+      <h2>Upload Video</h2>
+      <Divider />
+
       <div className="form-group">
         <ToastContainer />
       </div>
-      <h4>Upload Video</h4>
-      <hr className="my-4" />
 
       <form
         method="post"
@@ -78,7 +87,7 @@ const UploadVideo = () => {
         encType="multipart/form-data"
       >
         <div className="form-group files">
-          <label>Upload Your Videos Here</label>
+          <h4>Buradan video yükleyebilirsiniz</h4>
           <input
             type="file"
             name="file"
@@ -87,18 +96,20 @@ const UploadVideo = () => {
             accept="video/*"
             onChange={fileChangeHandler}
           />
-          <Progress status="active" value={loaded} className="mt-4 mb-1" />
+          <Progress status="active" percent={loaded} />
 
-          <button
-            type="button"
-            className="btn btn-success btn-block"
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
             onClick={fileUploadHandler}
+            style={{ marginTop: "15px" }}
           >
             Upload Video
-          </button>
+          </Button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

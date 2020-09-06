@@ -56,7 +56,7 @@ class VideoPlayer extends React.Component {
         <Row style={{ width: "100vw" }}>
           <div style={{marginLeft: "330px", marginTop: "100px"}}>
             {this.state.loaded ? (
-              <div data-vjs-player>
+              <div style={{width: "1300px", height: "700px"}} data-vjs-player>
                 <video ref={node => this.videoNode = node} className="video-js vjs-big-play-centered" />
               </div>
             ) : ' Loading ... '}

@@ -21,10 +21,19 @@ const upload = multer({
 });
 
 router.post("/uploadVideo", upload.single("file"), (req, res, next) => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+  var minute = today.getMinutes();
+  var hour = today.getHours();
+
+  today = mm + "/" + dd + "/" + yyyy + "-" + hour + ":" + minute;
+
   thumbnailGenerator.generateThumbnail(
     // /api/videos is made publically available in App.js
     "http://localhost:5000/api/videos/" + req.file.filename.replace(/ /g, "_"),
-    req.file.filename.replace(/ /g, "_")
+    req.file.filename.replace(/ /g, "_"), today
   );
 
   res.status(200).json({
