@@ -33,6 +33,9 @@ mongoose.connect(
 // set up routes
 app.use("/users", require("./routes/userRouter"));
 app.use("/api", require("./routes/uploadVideoRouter"));
+app.use("/api", require("./routes/uploadPhotoRouter"));
 app.use("/api", require("./routes/videoListRouter"));
+app.use("/api", require("./routes/photoListRouter"));
 app.use("/api", require("./routes/sendMailRouter"));
 app.use("/api/videos", express.static("media/uploads"));
+app.use("/api/photos", express.static("media/photos"));

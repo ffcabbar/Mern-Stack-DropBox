@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 import { Row, Col, Card, Divider } from "antd";
 
-const Dashboard = () => {
+const Videos = () => {
   const [videoList, setVideoList] = useState([]);
 
   useEffect(() => {
@@ -66,4 +66,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Videos;
