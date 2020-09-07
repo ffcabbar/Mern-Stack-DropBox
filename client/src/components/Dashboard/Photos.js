@@ -48,7 +48,7 @@ const Photos = () => {
                   <img
                     src={item.photo_path}
                     alt="video thubmnail"
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", maxHeight: "140px" }}
                   />
                 }
               >
